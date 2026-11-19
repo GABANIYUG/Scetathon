@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { EventOperationalStatus, EventSettings } from "@/lib/types/database";
+import { EventOperationalStatus, EventSettings, AuditLog } from "@/lib/types/database";
 import { getEventSettings } from "./settings";
 import { getAdminAnnouncements } from "./announcements";
 
@@ -152,5 +152,65 @@ export async function updateEventStatus(
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Failed to update event status";
     return { success: false, error: msg };
+  }
+}
+
+/**
+ * Fetches recent system audit records for administrative review.
+ */
+export async function getAuditLogs(): Promise<AuditLog[]> {
+  if (!isSupabaseConfigured()) {
+    return [
+      {
+        id: "log-001",
+        actor_id: null,
+        action: "EVENT_STATUS_CHANGED",
+        entity_type: "event_settings",
+        entity_id: "current",
+        metadata: { new_status: "preparing", note: "Phase 7 initialization" },
+        created_at: new Date(2026, 0, 15, 10, 0, 0).toISOString(),
+      },
+      {
+        id: "log-002",
+        actor_id: null,
+        action: "ANNOUNCEMENT_PUBLISHED",
+        entity_type: "announcement",
+        entity_id: "ann-001",
+        metadata: { title: "Registration Guidelines Preview", priority: "Important" },
+        created_at: new Date(2026, 0, 15, 10, 5, 0).toISOString(),
+      },
+      {
+        id: "log-003",
+        actor_id: null,
+        action: "TRACK_RATIFIED",
+        entity_type: "track",
+        entity_id: "ai-systems",
+        metadata: { title: "AI & Intelligent Systems", status: "published" },
+        created_at: new Date(2026, 0, 18, 14, 0, 0).toISOString(),
+      },
+      {
+        id: "log-004",
+        actor_id: null,
+        action: "EVENT_SETTINGS_UPDATED",
+        entity_type: "event_settings",
+        entity_id: "current",
+        metadata: { min_team_size: 2, max_team_size: 4 },
+        created_at: new Date(2026, 0, 20, 9, 30, 0).toISOString(),
+      },
+    ];
+  }
+
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("audit_logs")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(100);
+
+    if (error || !data) return [];
+    return data as AuditLog[];
+  } catch {
+    return [];
   }
 }

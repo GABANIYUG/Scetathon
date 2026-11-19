@@ -24,6 +24,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { label: "Announcements", href: "/admin/announcements", icon: Icons.Megaphone, tag: "Drafts" },
   { label: "People & Committee", href: "/admin/people", icon: Icons.Shield, tag: "4 Groups" },
   { label: "Event Settings", href: "/admin/settings", icon: Icons.Settings },
+  { label: "Audit Logs", href: "/admin/audit-logs", icon: Icons.Activity },
 ];
 
 export const AdminSidebar: React.FC = () => {
