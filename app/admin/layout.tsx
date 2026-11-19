@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { connection } from "next/server";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getCurrentUser, isFacultyAdmin, isStudentLead } from "@/lib/auth/permissions";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+
+/**
+ * Opt the entire /admin segment out of static-shell prerendering validation.
+ * All admin routes require request-time authentication (cookies) and must
+ * block until a user session is verified. This is the documented Next.js 16
+ * Cache Components migration pattern for auth-protected segments.
+ * See: https://nextjs.org/docs/messages/blocking-prerender-dynamic
+ */
+export const instant = false;
 
 export const metadata: Metadata = {
   title: "Admin Control Center",
@@ -19,7 +27,6 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  await connection();
   const isConfigured = isSupabaseConfigured();
 
   // If Supabase is configured, enforce server-side RBAC

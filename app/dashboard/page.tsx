@@ -1,6 +1,5 @@
 import React from "react";
 import { redirect } from "next/navigation";
-import { connection } from "next/server";
 import { Container } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
 import { GlassPanel } from "@/components/ui/GlassPanel";
@@ -17,13 +16,14 @@ import { EventLiveBanner } from "@/components/operations/EventLiveBanner";
 import { NotificationCenter } from "@/components/notifications/NotificationCenter";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 
+export const instant = false;
+
 export const metadata = {
   title: "Participant Dashboard",
   description: "Manage your SCETATHON squad roster, track application status, and view event credentials.",
 };
 
 export default async function DashboardPage() {
-  await connection();
   const isConfigured = isSupabaseConfigured();
   const user = await getCurrentUser();
 
