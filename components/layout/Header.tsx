@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
@@ -11,13 +11,37 @@ import { Icons } from "@/components/ui/icons";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
+import { isSupabaseConfigured, createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
   const scrollY = useScrollPosition();
   const isScrolled = scrollY > 20;
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+    try {
+      const supabase = createClient();
+      supabase.auth.getSession().then(({ data }) => {
+        setHasSession(Boolean(data.session));
+      });
+
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((_event, session) => {
+        setHasSession(Boolean(session));
+      });
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    } catch {
+      // Ignore if offline
+    }
+  }, []);
 
   // Route-aware active item determination
   const isNavActive = (href: string) => {
@@ -78,6 +102,28 @@ export const Header: React.FC = () => {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-3">
+              {hasSession ? (
+                <Link
+                  href="/dashboard"
+                  className={cn(
+                    "text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all duration-200 flex items-center gap-1.5",
+                    pathname.startsWith("/dashboard")
+                      ? "bg-[var(--color-accent-lime-subtle)] text-[var(--color-accent-lime)] border-[var(--color-accent-lime-border)]"
+                      : "text-[var(--color-text-secondary)] hover:text-white border-white/10 hover:border-white/20"
+                  )}
+                >
+                  <Icons.Users size={14} />
+                  <span>Dashboard</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="text-xs font-semibold text-[var(--color-text-secondary)] hover:text-white px-3 py-1.5 rounded-lg hover:bg-white/5 transition-colors"
+                >
+                  Sign In
+                </Link>
+              )}
+
               {siteConfig.registration.isOpen ? (
                 <Button
                   href={siteConfig.registration.href}

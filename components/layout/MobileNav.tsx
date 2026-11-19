@@ -120,7 +120,24 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Bottom CTA & Notice */}
-        <div className="pt-6 border-t border-white/10 space-y-4">
+        <div className="pt-6 border-t border-white/10 space-y-3">
+          <div className="grid grid-cols-2 gap-2">
+            <Link
+              href="/login"
+              onClick={onClose}
+              className="py-2.5 px-3 rounded-lg border border-white/15 bg-white/5 text-center text-xs font-semibold text-white hover:bg-white/10 transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/dashboard"
+              onClick={onClose}
+              className="py-2.5 px-3 rounded-lg border border-[var(--color-accent-lime-border)] bg-[var(--color-accent-lime-subtle)] text-center text-xs font-semibold text-[var(--color-accent-lime)] hover:bg-[var(--color-accent-lime)] hover:text-[var(--color-bg-primary)] transition-colors"
+            >
+              Dashboard
+            </Link>
+          </div>
+
           <Button
             href={siteConfig.registration.href}
             fullWidth
