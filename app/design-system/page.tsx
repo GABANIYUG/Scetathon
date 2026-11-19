@@ -1,7 +1,5 @@
 import React from "react";
 import { siteConfig } from "@/config/site";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -9,20 +7,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { IconButton } from "@/components/ui/IconButton";
 import { Icons } from "@/components/ui/icons";
-import { BackgroundGrid } from "@/components/visual/BackgroundGrid";
 import { SectionDivider } from "@/components/visual/SectionDivider";
 
 export default function DesignSystemPage() {
   return (
-    <div className="relative min-h-screen flex flex-col bg-[var(--color-bg-primary)] overflow-x-hidden">
-      {/* Background visual foundation with subtle grid & controlled glow */}
-      <BackgroundGrid variant="grid" glowLime glowCyan />
-
-      {/* Global Application Header */}
-      <Header />
-
-      {/* Main Content Area */}
-      <main className="flex-1 relative z-10">
+    <div className="py-8 space-y-12">
         {/* Foundation Hero Section */}
         <section id="home" className="pt-16 pb-20 md:pt-24 md:pb-28">
           <Container size="lg">
@@ -468,10 +457,6 @@ export default function DesignSystemPage() {
             </div>
           </Container>
         </section>
-      </main>
-
-      {/* Global Application Footer */}
-      <Footer />
     </div>
   );
 }

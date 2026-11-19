@@ -17,6 +17,9 @@ export interface SiteConfig {
     shortName: string;
     fullName: string;
     location: string;
+    city: string;
+    state: string;
+    country: string;
   };
   navigation: NavItem[];
   socials: {
@@ -40,14 +43,17 @@ export const siteConfig: SiteConfig = {
   institution: {
     shortName: "SCET",
     fullName: "Sarvajanik College of Engineering & Technology",
-    location: "Surat, Gujarat, India",
+    location: "Athwalines, Surat, Gujarat, India",
+    city: "Surat",
+    state: "Gujarat",
+    country: "India",
   },
   navigation: [
-    { label: "Home", href: "#home" },
-    { label: "Challenges", href: "#challenges" },
-    { label: "Schedule", href: "#schedule" },
-    { label: "Experience", href: "#experience" },
-    { label: "About", href: "#about" },
+    { label: "Home", href: "/" },
+    { label: "Challenges", href: "/challenges" },
+    { label: "Schedule", href: "/schedule" },
+    { label: "Experience", href: "/experience" },
+    { label: "About", href: "/about" },
   ],
   socials: [
     { platform: "GitHub", href: "https://github.com", ariaLabel: "Follow GitHub updates" },
@@ -57,11 +63,10 @@ export const siteConfig: SiteConfig = {
   ],
   registration: {
     ctaText: "Register Now",
-    href: "#register",
+    href: "/#register",
     isOpen: true,
     statusNotice: "Registrations opening soon for verified collegiate teams.",
   },
   eventDetailsNotice:
-    "Official schedule, prize pools, problem tracks, and partner announcements will be published upon committee ratification.",
+    "Official schedule, challenge briefs, and partner announcements will be published upon technical committee ratification.",
 };
-

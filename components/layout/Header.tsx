@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -9,63 +11,67 @@ import { Icons } from "@/components/ui/icons";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
-import { useActiveSection } from "@/hooks/useActiveSection";
 import { cn } from "@/lib/utils";
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrollY = useScrollPosition();
   const isScrolled = scrollY > 20;
+  const pathname = usePathname();
 
-  const sectionIds = ["home", "about", "challenges", "experience", "schedule"];
-  const activeSection = useActiveSection(sectionIds, 160);
+  // Route-aware active item determination
+  const isNavActive = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
+  };
 
   return (
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 w-full transition-all duration-300",
+          "sticky top-0 z-50 w-full transition-all duration-300",
           isScrolled
-            ? "bg-[#080B12]/75 backdrop-blur-xl border-b border-white/10 py-3 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.7)]"
-            : "bg-transparent border-b border-transparent py-5"
+            ? "bg-[#080B12]/80 backdrop-blur-2xl border-b border-white/10 py-3 shadow-[0_12px_36px_-8px_rgba(0,0,0,0.8)]"
+            : "bg-[#080B12]/40 backdrop-blur-md border-b border-white/5 py-4 sm:py-5"
         )}
       >
         <Container size="lg">
           <div className="flex items-center justify-between">
-            {/* Brand Logo */}
-            <a
-              href="#home"
+            {/* Brand Logo with App Router Link */}
+            <Link
+              href="/"
               className="inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-lime)] rounded-md transition-opacity hover:opacity-90"
               aria-label="SCETATHON Home"
             >
               <BrandLogo size="md" />
-            </a>
+            </Link>
 
-            {/* Desktop Navigation with Active Indicators */}
+            {/* Desktop Navigation using Next.js Link & usePathname Active State */}
             <nav
-              className="hidden md:flex items-center space-x-1 lg:space-x-1.5 p-1 rounded-full bg-[rgba(21,29,42,0.45)] border border-white/5 backdrop-blur-md"
+              className="hidden md:flex items-center space-x-1 lg:space-x-1.5 p-1 rounded-full bg-[rgba(21,29,42,0.6)] border border-white/10 backdrop-blur-xl shadow-inner"
               aria-label="Main Navigation"
             >
               {siteConfig.navigation.map((item) => {
-                const targetId = item.href.replace("#", "");
-                const isActive = activeSection === targetId;
+                const active = isNavActive(item.href);
 
                 return (
-                  <a
+                  <Link
                     key={item.label}
                     href={item.href}
                     className={cn(
                       "relative px-4 py-1.5 text-xs lg:text-sm font-medium tracking-wide rounded-full transition-all duration-200 select-none",
-                      isActive
-                        ? "text-[var(--color-accent-lime)] bg-white/5 font-semibold shadow-[0_0_12px_rgba(183,255,90,0.15)]"
+                      active
+                        ? "text-[var(--color-accent-lime)] bg-white/10 font-semibold shadow-[0_0_16px_rgba(183,255,90,0.2)]"
                         : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/5"
                     )}
                   >
                     {item.label}
-                    {isActive && (
-                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-0.5 rounded-full bg-[var(--color-accent-lime)] shadow-[0_0_8px_var(--color-accent-lime)]" />
+                    {active && (
+                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-0.5 rounded-full bg-[var(--color-accent-lime)] shadow-[0_0_8px_var(--color-accent-lime)]" />
                     )}
-                  </a>
+                  </Link>
                 );
               })}
             </nav>
@@ -83,7 +89,7 @@ export const Header: React.FC = () => {
                   {siteConfig.registration.ctaText}
                 </Button>
               ) : (
-                <div className="px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs font-mono text-[var(--color-text-muted)]">
+                <div className="px-3.5 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs font-mono text-[var(--color-text-muted)]">
                   Registration Soon
                 </div>
               )}

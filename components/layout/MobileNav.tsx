@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
@@ -15,8 +17,16 @@ export interface MobileNavProps {
 
 export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
-  // Close on ESC key
+  const isNavActive = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
+  };
+
+  // Close on ESC key and trap body scroll
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -55,11 +65,13 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
       />
 
       {/* Glass Menu Panel */}
-      <div className="fixed inset-y-0 right-0 w-full max-w-xs bg-[#0F1520]/90 backdrop-blur-2xl border-l border-white/10 p-6 shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-out">
+      <div className="fixed inset-y-0 right-0 w-full max-w-xs bg-[#0F1520]/95 backdrop-blur-2xl border-l border-white/10 p-6 shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-out z-10">
         {/* Top bar inside drawer */}
         <div>
           <div className="flex items-center justify-between pb-6 border-b border-white/10">
-            <BrandLogo size="sm" />
+            <Link href="/" onClick={onClose}>
+              <BrandLogo size="sm" />
+            </Link>
             <IconButton
               aria-label="Close menu"
               variant="ghost"
@@ -70,23 +82,40 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
             </IconButton>
           </div>
 
-          {/* Navigation Links */}
+          {/* Navigation Links using App Router Link */}
           <nav className="mt-8 flex flex-col space-y-2">
-            {siteConfig.navigation.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={onClose}
-                className={cn(
-                  "px-3.5 py-3 rounded-xl text-base font-medium transition-all duration-200",
-                  "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/5",
-                  "flex items-center justify-between group"
-                )}
-              >
-                <span>{item.label}</span>
-                <Icons.ArrowRight size={14} className="text-white/20 group-hover:text-[var(--color-accent-lime)] transition-colors" />
-              </a>
-            ))}
+            {siteConfig.navigation.map((item) => {
+              const active = isNavActive(item.href);
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={onClose}
+                  className={cn(
+                    "px-3.5 py-3 rounded-xl text-base font-medium transition-all duration-200 select-none",
+                    active
+                      ? "text-[var(--color-accent-lime)] bg-white/10 font-semibold border border-[var(--color-accent-lime)]/30"
+                      : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/5",
+                    "flex items-center justify-between group"
+                  )}
+                >
+                  <span className="flex items-center gap-2.5">
+                    {active && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)] shadow-[0_0_8px_#B7FF5A]" />
+                    )}
+                    <span>{item.label}</span>
+                  </span>
+                  <Icons.ArrowRight
+                    size={14}
+                    className={cn(
+                      "transition-colors",
+                      active ? "text-[var(--color-accent-lime)]" : "text-white/20 group-hover:text-white"
+                    )}
+                  />
+                </Link>
+              );
+            })}
           </nav>
         </div>
 
@@ -102,9 +131,12 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
             {siteConfig.registration.ctaText}
           </Button>
 
-          <p className="text-[11px] text-[var(--color-text-muted)] text-center font-mono">
-            {siteConfig.institution.shortName} · {siteConfig.institution.location}
-          </p>
+          <div className="text-[11px] text-[var(--color-text-muted)] text-center font-mono space-y-1">
+            <p className="text-white/80 font-medium">
+              {siteConfig.institution.shortName} · {siteConfig.institution.city}
+            </p>
+            <p>{siteConfig.tagline}</p>
+          </div>
         </div>
       </div>
     </div>

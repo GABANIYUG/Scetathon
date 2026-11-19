@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
 import { BrandLogo } from "@/components/layout/BrandLogo";
@@ -61,12 +62,12 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2 text-sm text-[var(--color-text-secondary)]">
               {siteConfig.navigation.map((item) => (
                 <li key={item.label}>
-                  <a
+                  <Link
                     href={item.href}
                     className="hover:text-[var(--color-accent-lime)] transition-colors"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
