@@ -10,6 +10,21 @@ export const colors = {
     elevated: "#151D2A",
     elevatedHover: "#1B2536",
     glass: "rgba(15, 21, 32, 0.75)",
+    glassSurface: "rgba(21, 29, 42, 0.65)",
+    glassSubtle: "rgba(255, 255, 255, 0.035)",
+  },
+  glass: {
+    background: "rgba(21, 29, 42, 0.65)",
+    subtleBackground: "rgba(255, 255, 255, 0.035)",
+    border: "rgba(255, 255, 255, 0.12)",
+    borderHighlight: "rgba(255, 255, 255, 0.22)",
+    borderLime: "rgba(183, 255, 90, 0.35)",
+    borderCyan: "rgba(101, 217, 242, 0.35)",
+    blur: {
+      subtle: "16px",
+      elevated: "24px",
+      heavy: "28px",
+    },
   },
   accent: {
     lime: {

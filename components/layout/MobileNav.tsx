@@ -45,20 +45,20 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
       aria-modal="true"
       aria-label="Mobile Navigation Menu"
       ref={dialogRef}
-      className="fixed inset-0 z-50 md:hidden"
+      className="fixed inset-0 z-50 md:hidden animate-fade-in"
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#080B12]/80 backdrop-blur-md transition-opacity duration-300"
+        className="fixed inset-0 bg-[#080B12]/85 backdrop-blur-md transition-opacity duration-300"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Menu Panel */}
-      <div className="fixed inset-y-0 right-0 w-full max-w-xs bg-[var(--color-bg-secondary)] border-l border-[var(--color-border-subtle)] p-6 shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-out">
+      {/* Glass Menu Panel */}
+      <div className="fixed inset-y-0 right-0 w-full max-w-xs bg-[#0F1520]/90 backdrop-blur-2xl border-l border-white/10 p-6 shadow-2xl flex flex-col justify-between transition-transform duration-300 ease-out">
         {/* Top bar inside drawer */}
         <div>
-          <div className="flex items-center justify-between pb-6 border-b border-[var(--color-border-subtle)]">
+          <div className="flex items-center justify-between pb-6 border-b border-white/10">
             <BrandLogo size="sm" />
             <IconButton
               aria-label="Close menu"
@@ -78,18 +78,20 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
                 href={item.href}
                 onClick={onClose}
                 className={cn(
-                  "px-3 py-2.5 rounded-lg text-base font-medium transition-colors",
-                  "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-elevated)]"
+                  "px-3.5 py-3 rounded-xl text-base font-medium transition-all duration-200",
+                  "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/5",
+                  "flex items-center justify-between group"
                 )}
               >
-                {item.label}
+                <span>{item.label}</span>
+                <Icons.ArrowRight size={14} className="text-white/20 group-hover:text-[var(--color-accent-lime)] transition-colors" />
               </a>
             ))}
           </nav>
         </div>
 
         {/* Bottom CTA & Notice */}
-        <div className="pt-6 border-t border-[var(--color-border-subtle)] space-y-4">
+        <div className="pt-6 border-t border-white/10 space-y-4">
           <Button
             href={siteConfig.registration.href}
             fullWidth
@@ -108,4 +110,3 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
     </div>
   );
 };
-

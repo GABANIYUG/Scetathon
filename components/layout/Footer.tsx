@@ -98,8 +98,10 @@ export const Footer: React.FC = () => {
             {siteConfig.institution.shortName}, Surat.
           </p>
           <div className="flex items-center space-x-6 font-mono text-[11px]">
-            <span>PHASE 1: DESIGN SYSTEM</span>
-            <span className="text-[var(--color-accent-lime)]">STATUS: READY</span>
+            <a href="/design-system" className="hover:text-[var(--color-accent-lime)] transition-colors underline-offset-4 hover:underline">
+              DESIGN SYSTEM SPEC
+            </a>
+            <span className="text-[var(--color-accent-lime)]">PHASE 2: HOMEPAGE LIVE</span>
           </div>
         </div>
       </Container>

@@ -204,14 +204,91 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   text-shadow: 0 0 16px rgba(101, 217, 242, 0.35);
 }
 
-/* Animation utilities */
+/* =========================================================================
+   Glassmorphism System
+   ========================================================================= */
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-elevated {
+  background: rgba(21, 29, 42, 0.65);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 16px 36px -8px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+}
+
+.glass-interactive {
+  background: rgba(21, 29, 42, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-interactive:hover {
+  background: rgba(27, 37, 54, 0.75);
+  border-color: rgba(183, 255, 90, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 20px 40px -10px rgba(0, 0, 0, 0.7),
+    0 0 24px -6px rgba(183, 255, 90, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+}
+
+.glass-highlight {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(21, 29, 42, 0.72) 40%, rgba(15, 21, 32, 0.85) 100%);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 
+    0 24px 48px -12px rgba(0, 0, 0, 0.7),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* Glass panel top highlight edge */
+.glass-edge-highlight {
+  position: relative;
+}
+
+.glass-edge-highlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Fallback for browsers that do not support backdrop-filter */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .glass-subtle {
+    background: #111722;
+  }
+  .glass-elevated,
+  .glass-interactive,
+  .glass-highlight {
+    background: #151D2A;
+  }
+}
+
+/* =========================================================================
+   Animation utilities & 3D Orbit Keyframes
+   ========================================================================= */
+
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes fadeUp {
@@ -226,11 +303,38 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 @keyframes pulseSubtle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+@keyframes orbitClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbitCounter {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes floatElement {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes radarSweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes corePulse {
   0%, 100% {
-    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 35px rgba(183, 255, 90, 0.35);
   }
   50% {
-    opacity: 0.65;
+    transform: scale(1.04);
+    box-shadow: 0 0 55px rgba(183, 255, 90, 0.55);
   }
 }
 
@@ -244,6 +348,31 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .animate-pulse-subtle {
   animation: pulseSubtle 3s ease-in-out infinite;
+}
+
+.animate-orbit-slow {
+  animation: orbitClockwise 32s linear infinite;
+}
+
+.animate-orbit-reverse {
+  animation: orbitCounter 24s linear infinite;
+}
+
+.animate-float {
+  animation: floatElement 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: floatElement 7s ease-in-out infinite;
+  animation-delay: -3.5s;
+}
+
+.animate-core-pulse {
+  animation: corePulse 4s ease-in-out infinite;
+}
+
+.animate-radar {
+  animation: radarSweep 10s linear infinite;
 }
 
 /* Accessibility: Respect Reduced Motion */
