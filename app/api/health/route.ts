@@ -1,20 +1,25 @@
 import { NextResponse } from "next/server";
-import { isSupabaseConfigured, createClient } from "@/lib/supabase/client";
-
-export const dynamic = "force-dynamic";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import { createClient } from "@/lib/supabase/server";
 
 /**
  * Health check endpoint for monitoring, load balancers, and DevOps telemetry.
+ * Next.js 16 Cache Components compatible: no legacy segment configs (e.g. export const dynamic).
+ * Dynamic execution is ensured via request context and Cache-Control: no-store response headers.
  * Strictly avoids leaking any credentials, keys, database connection strings, or user PII.
  */
-export async function GET() {
+export async function GET(request: Request) {
+  // Access request URL to ensure dynamic execution under Cache Components
+  const _reqUrl = request.url;
+  void _reqUrl;
+
   const isConfigured = isSupabaseConfigured();
   let dbStatus: "connected" | "offline_fallback" | "error" = "offline_fallback";
 
   if (isConfigured) {
     try {
-      // Safe ping against event_settings singleton
-      const supabase = createClient();
+      // Safe ping against event_settings singleton using server client
+      const supabase = await createClient();
       const { error } = await supabase.from("event_settings").select("id").limit(1);
       dbStatus = error ? "error" : "connected";
     } catch {
@@ -44,4 +49,3 @@ export async function GET() {
     },
   });
 }
-

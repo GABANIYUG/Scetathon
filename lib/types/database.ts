@@ -194,3 +194,28 @@ export interface RegisterTeamAtomicResult {
   status: RegistrationStatus;
 }
 
+export interface OperationsHealthStatus {
+  databaseConnected: boolean;
+  realtimeAvailable: boolean;
+  authConfigured: boolean;
+  eventStatusConfigured: boolean;
+  announcementEngineReady: boolean;
+  schedulePublished: boolean;
+  timestamp: string;
+}
+
+export interface AnnouncementMetrics {
+  total: number;
+  published: number;
+  draft: number;
+  archived: number;
+  publicCount: number;
+  teamsCount: number;
+  committeeCount: number;
+  urgentCount: number;
+  importantCount: number;
+  normalCount: number;
+  lastPublishedAt: string | null;
+}
+
+

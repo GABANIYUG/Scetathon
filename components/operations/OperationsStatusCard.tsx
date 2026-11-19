@@ -1,5 +1,5 @@
 import React from "react";
-import { OperationsHealthStatus, AnnouncementMetrics } from "@/lib/dal/operations";
+import { OperationsHealthStatus, AnnouncementMetrics } from "@/lib/types/database";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";

@@ -14,7 +14,7 @@ import { getParticipantAnnouncements } from "@/lib/dal/announcements";
 import { getEventSettings } from "@/lib/dal/settings";
 import { EventLiveBanner } from "@/components/operations/EventLiveBanner";
 import { NotificationCenter } from "@/components/notifications/NotificationCenter";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 
 export const metadata = {
   title: "Participant Dashboard",

@@ -1,0 +1,73 @@
+import { Announcement } from "@/lib/types/database";
+
+/**
+ * Standard provisional candidate announcements used when the database is offline or in preview mode.
+ * Safe to import in Client Components, Server Components, and static builds.
+ */
+export const FALLBACK_ANNOUNCEMENTS: Announcement[] = [
+  {
+    id: "ann-001",
+    title: "SCETATHON 24-Hour Hackathon Registration Preview Mode Active",
+    summary: "Collegiate squads may inspect challenge tracks and assemble participant credentials prior to registration opening.",
+    content: "The SCETATHON Technical Committee has published the provisional registration criteria and track domains. Teams consisting of 2 to 4 undergraduate or graduate engineering students from recognized colleges will be eligible to apply once registration officially opens.",
+    category: "Registration",
+    status: "published",
+    visibility: "Public Website",
+    priority: "Important",
+    pinned: true,
+    author_label: "Technical Committee & Organizing Core",
+    created_by: null,
+    published_at: new Date(2026, 0, 15, 10, 0, 0).toISOString(),
+    created_at: new Date(2026, 0, 15, 9, 30, 0).toISOString(),
+    updated_at: new Date(2026, 0, 15, 10, 0, 0).toISOString(),
+  },
+  {
+    id: "ann-002",
+    title: "Six Challenge Tracks Ratified for SCETATHON Edition",
+    summary: "Explore problem statements spanning AI Systems, Next-Gen Fintech, Smart Cities, Cyber Defense, Green Tech, and Open Innovation.",
+    content: "All six challenge domains have been ratified by academic mentors and industry partners. Detailed rubrics, technical competencies, and architectural guidelines are accessible on the Challenges page.",
+    category: "Challenges",
+    status: "published",
+    visibility: "Public Website",
+    priority: "Normal",
+    pinned: false,
+    author_label: "Academic Mentorship Council",
+    created_by: null,
+    published_at: new Date(2026, 0, 18, 14, 0, 0).toISOString(),
+    created_at: new Date(2026, 0, 18, 13, 0, 0).toISOString(),
+    updated_at: new Date(2026, 0, 18, 14, 0, 0).toISOString(),
+  },
+  {
+    id: "ann-003",
+    title: "24-Hour Operational Schedule Architecture Released",
+    summary: "Phase breakdown from opening ceremonies and mentor checkpoints through code freeze and final jury presentations.",
+    content: "Participants can review the complete timeline for the 24-hour sprint. Checkpoints 1 through 3 will feature dedicated industry mentors to unblock architecture and implementation challenges.",
+    category: "Schedule",
+    status: "published",
+    visibility: "Public Website",
+    priority: "Normal",
+    pinned: false,
+    author_label: "Event Operations Lead",
+    created_by: null,
+    published_at: new Date(2026, 0, 20, 11, 0, 0).toISOString(),
+    created_at: new Date(2026, 0, 20, 10, 30, 0).toISOString(),
+    updated_at: new Date(2026, 0, 20, 11, 0, 0).toISOString(),
+  },
+  {
+    id: "ann-004",
+    title: "Squad Verification & Workstation Networking Instructions",
+    summary: "Crucial instructions for accepted team leaders regarding campus arrival, power distribution, and local subnet credentials.",
+    content: "Team leaders must present official college photo IDs at the check-in desk at SCET Campus. High-speed wired ports and dual 5GHz Wi-Fi networks will be allocated per squad station.",
+    category: "Event Operations",
+    status: "published",
+    visibility: "Registered Teams Only",
+    priority: "Urgent",
+    pinned: true,
+    author_label: "Campus Infrastructure Team",
+    created_by: null,
+    published_at: new Date(2026, 0, 22, 16, 0, 0).toISOString(),
+    created_at: new Date(2026, 0, 22, 15, 30, 0).toISOString(),
+    updated_at: new Date(2026, 0, 22, 16, 0, 0).toISOString(),
+  },
+];
+

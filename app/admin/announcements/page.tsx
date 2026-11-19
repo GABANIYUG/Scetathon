@@ -12,7 +12,7 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { AnnouncementComposer } from "@/components/announcements/AnnouncementComposer";
 import { AnnouncementPriorityBadge } from "@/components/announcements/AnnouncementPriorityBadge";
 import { AnnouncementPreview } from "@/components/announcements/AnnouncementPreview";
-import { FALLBACK_ANNOUNCEMENTS } from "@/lib/dal/announcements";
+import { FALLBACK_ANNOUNCEMENTS } from "@/lib/dal/announcements-fallback";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";

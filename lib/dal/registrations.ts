@@ -1,5 +1,6 @@
+import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { Registration, RegistrationStatus, RegisterTeamAtomicResult } from "@/lib/types/database";
 
 /**

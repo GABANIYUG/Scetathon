@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { isSupabaseConfigured } from "./client";
+import { isSupabaseConfigured, getSupabaseUrl, getSupabaseAnonKey } from "./config";
 
 export async function updateSession(request: NextRequest) {
   // If Supabase credentials are not configured, allow public navigation without breaking
@@ -18,8 +18,8 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+  const url = getSupabaseUrl();
+  const key = getSupabaseAnonKey();
 
   const supabase = createServerClient(url, key, {
     cookies: {

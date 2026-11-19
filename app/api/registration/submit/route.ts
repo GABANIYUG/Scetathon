@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { submitAtomicRegistration } from "@/lib/dal/registrations";
 import { getEventSettings } from "@/lib/dal/settings";
 

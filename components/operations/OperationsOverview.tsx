@@ -2,8 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { EventSettings, Announcement } from "@/lib/types/database";
-import { OperationsHealthStatus, AnnouncementMetrics } from "@/lib/dal/operations";
+import { EventSettings, Announcement, OperationsHealthStatus, AnnouncementMetrics } from "@/lib/types/database";
 import { EventStatusController } from "./EventStatusController";
 import { OperationsStatusCard } from "./OperationsStatusCard";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";

@@ -1,5 +1,7 @@
+import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { getSupabaseUrl, getSupabaseAnonKey } from "./config";
 
 /**
  * Creates a server-side Supabase client for Server Components,
@@ -9,8 +11,8 @@ import { cookies } from "next/headers";
 export async function createClient() {
   const cookieStore = await cookies();
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-project.supabase.co";
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "placeholder-anon-key";
+  const url = getSupabaseUrl();
+  const key = getSupabaseAnonKey();
 
   return createServerClient(url, key, {
     cookies: {
@@ -30,4 +32,3 @@ export async function createClient() {
     },
   });
 }
-

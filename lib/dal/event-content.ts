@@ -1,5 +1,6 @@
+import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { Track, SchedulePhaseRecord } from "@/lib/types/database";
 import { challengeTracks as staticTracks } from "@/config/tracks";
 import { schedulePhases as staticPhases } from "@/config/schedule";

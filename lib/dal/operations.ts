@@ -1,32 +1,17 @@
+import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { EventOperationalStatus, EventSettings, AuditLog } from "@/lib/types/database";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
+import {
+  EventOperationalStatus,
+  EventSettings,
+  AuditLog,
+  OperationsHealthStatus,
+  AnnouncementMetrics,
+} from "@/lib/types/database";
 import { getEventSettings } from "./settings";
 import { getAdminAnnouncements } from "./announcements";
 
-export interface OperationsHealthStatus {
-  databaseConnected: boolean;
-  realtimeAvailable: boolean;
-  authConfigured: boolean;
-  eventStatusConfigured: boolean;
-  announcementEngineReady: boolean;
-  schedulePublished: boolean;
-  timestamp: string;
-}
-
-export interface AnnouncementMetrics {
-  total: number;
-  published: number;
-  draft: number;
-  archived: number;
-  publicCount: number;
-  teamsCount: number;
-  committeeCount: number;
-  urgentCount: number;
-  importantCount: number;
-  normalCount: number;
-  lastPublishedAt: string | null;
-}
+export type { OperationsHealthStatus, AnnouncementMetrics };
 
 /**
  * Retrieves the live operational readiness of the event backend.
