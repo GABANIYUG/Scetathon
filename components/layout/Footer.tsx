@@ -70,6 +70,15 @@ export const Footer: React.FC = () => {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  href="/updates"
+                  className="hover:text-[var(--color-accent-lime)] transition-colors flex items-center gap-1.5"
+                >
+                  <span>Live Bulletins</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-lime)] animate-pulse" />
+                </Link>
+              </li>
             </ul>
           </div>
 

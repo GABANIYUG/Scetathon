@@ -16,6 +16,7 @@ export interface AdminNavItem {
 
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { label: "Overview", href: "/admin", icon: Icons.Dashboard, exact: true },
+  { label: "Operations", href: "/admin/operations", icon: Icons.Radio, tag: "Live" },
   { label: "Registrations", href: "/admin/registrations", icon: Icons.Briefcase, tag: "Empty" },
   { label: "Teams", href: "/admin/teams", icon: Icons.Users, tag: "Empty" },
   { label: "Challenges & Tracks", href: "/admin/challenges", icon: Icons.Layers, tag: "6 Tracks" },

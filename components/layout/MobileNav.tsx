@@ -116,6 +116,30 @@ export const MobileNav: React.FC<MobileNavProps> = ({ isOpen, onClose }) => {
                 </Link>
               );
             })}
+
+            <Link
+              href="/updates"
+              onClick={onClose}
+              className={cn(
+                "px-3.5 py-3 rounded-xl text-base font-medium transition-all duration-200 select-none",
+                pathname.startsWith("/updates")
+                  ? "text-[var(--color-accent-lime)] bg-white/10 font-semibold border border-[var(--color-accent-lime)]/30"
+                  : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-white/5",
+                "flex items-center justify-between group"
+              )}
+            >
+              <span className="flex items-center gap-2.5">
+                <Icons.Radio size={16} className="text-[var(--color-accent-lime)]" />
+                <span>Live Bulletins</span>
+              </span>
+              <Icons.ArrowRight
+                size={14}
+                className={cn(
+                  "transition-colors",
+                  pathname.startsWith("/updates") ? "text-[var(--color-accent-lime)]" : "text-white/20 group-hover:text-white"
+                )}
+              />
+            </Link>
           </nav>
         </div>
 

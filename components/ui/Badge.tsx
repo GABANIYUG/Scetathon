@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-export type BadgeVariant = "default" | "accent" | "success" | "warning";
+export type BadgeVariant = "default" | "accent" | "success" | "warning" | "outline";
 export type BadgeSize = "sm" | "md";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -30,6 +30,8 @@ export const Badge: React.FC<BadgeProps> = ({
       "bg-[rgba(74,222,128,0.12)] text-[#4ADE80] border border-[rgba(74,222,128,0.28)]",
     warning:
       "bg-[rgba(251,191,36,0.12)] text-[#FBBF24] border border-[rgba(251,191,36,0.28)]",
+    outline:
+      "bg-transparent text-[var(--color-text-secondary)] border border-white/15",
   };
 
   const dotStyles: Record<BadgeVariant, string> = {
@@ -37,6 +39,7 @@ export const Badge: React.FC<BadgeProps> = ({
     accent: "bg-[var(--color-accent-lime)] shadow-[0_0_8px_rgba(183,255,90,0.6)]",
     success: "bg-[#4ADE80] shadow-[0_0_8px_rgba(74,222,128,0.6)]",
     warning: "bg-[#FBBF24] shadow-[0_0_8px_rgba(251,191,36,0.6)]",
+    outline: "bg-[var(--color-text-muted)]",
   };
 
   const sizeStyles: Record<BadgeSize, string> = {

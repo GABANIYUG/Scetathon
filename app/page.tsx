@@ -14,10 +14,20 @@ import { BuildLab } from "@/components/interactive/BuildLab";
 import { ScheduleSection } from "@/components/sections/ScheduleSection";
 import { FinalCtaSection } from "@/components/sections/FinalCtaSection";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { EventLiveBanner } from "@/components/operations/EventLiveBanner";
+import { getEventSettings } from "@/lib/dal/settings";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await getEventSettings();
+
   return (
     <>
+      {/* Live Event Operations Banner */}
+      <EventLiveBanner
+        initialStatus={settings.event_status}
+        initialMessage={settings.public_status_message}
+      />
+
       {/* ===================================================================
           HERO SECTION: The Innovation Core & Editorial Value Proposition
           =================================================================== */}

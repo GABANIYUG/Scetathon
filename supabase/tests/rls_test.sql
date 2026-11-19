@@ -278,6 +278,52 @@ BEGIN
   RESET ROLE;
 
   -- ---------------------------------------------------------------------------
+  -- PHASE 7 TEST 15: Participants cannot forge read receipts for another user
+  -- ---------------------------------------------------------------------------
+  BEGIN
+    SET LOCAL ROLE authenticated;
+    PERFORM set_config('request.jwt.claim.sub', c_user_a::TEXT, true);
+    -- User A attempts to mark read on behalf of User B
+    INSERT INTO public.announcement_reads (announcement_id, user_id)
+    VALUES (v_announcement_id, c_user_b);
+    RAISE EXCEPTION 'TEST 15 FAILED: Participant A was able to insert read receipt for Participant B!';
+  EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE '✓ TEST 15 PASSED: Forged read receipts rejected by RLS (%s).', SQLERRM;
+  END;
+
+  RESET ROLE;
+
+  -- ---------------------------------------------------------------------------
+  -- PHASE 7 TEST 16: Unauthorized users cannot change public event status
+  -- ---------------------------------------------------------------------------
+  BEGIN
+    SET LOCAL ROLE authenticated;
+    PERFORM set_config('request.jwt.claim.sub', c_user_a::TEXT, true);
+    -- User A attempts to call atomic status updater without faculty_admin role
+    PERFORM public.update_event_status_atomic('live', 'Hacked status');
+    RAISE EXCEPTION 'TEST 16 FAILED: Non-admin participant was able to change event status!';
+  EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE '✓ TEST 16 PASSED: Event status mutation rejected for unauthorized callers (%s).', SQLERRM;
+  END;
+
+  RESET ROLE;
+
+  -- ---------------------------------------------------------------------------
+  -- PHASE 7 TEST 17: Ordinary participants cannot create official announcements
+  -- ---------------------------------------------------------------------------
+  BEGIN
+    SET LOCAL ROLE authenticated;
+    PERFORM set_config('request.jwt.claim.sub', c_user_a::TEXT, true);
+    INSERT INTO public.announcements (title, summary, content, category, status, visibility)
+    VALUES ('Rogue Notice', 'Forged alert', 'Hacked', 'General', 'published', 'Public Website');
+    RAISE EXCEPTION 'TEST 17 FAILED: Ordinary participant was able to insert announcement!';
+  EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE '✓ TEST 17 PASSED: Announcement creation restricted to authorized roles (%s).', SQLERRM;
+  END;
+
+  RESET ROLE;
+
+  -- ---------------------------------------------------------------------------
   -- CLEANUP TEST FIXTURES
   -- ---------------------------------------------------------------------------
   DELETE FROM public.registrations WHERE id = v_reg_b_id;

@@ -102,6 +102,20 @@ export const Header: React.FC = () => {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-3">
+              <Link
+                href="/updates"
+                className={cn(
+                  "text-xs font-semibold px-2.5 py-1.5 rounded-lg border transition-all duration-200 flex items-center gap-1.5",
+                  pathname.startsWith("/updates")
+                    ? "bg-[var(--color-accent-lime-subtle)] text-[var(--color-accent-lime)] border-[var(--color-accent-lime-border)]"
+                    : "text-[var(--color-text-secondary)] hover:text-white border-white/10 hover:border-white/20"
+                )}
+                title="Live bulletins and updates"
+              >
+                <Icons.Radio size={13} className="text-[var(--color-accent-lime)]" />
+                <span>Bulletins</span>
+              </Link>
+
               {hasSession ? (
                 <Link
                   href="/dashboard"

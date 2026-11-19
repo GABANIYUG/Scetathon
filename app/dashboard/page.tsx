@@ -10,6 +10,10 @@ import { getCurrentUser, isFacultyAdmin, isStudentLead } from "@/lib/auth/permis
 import { getProfile } from "@/lib/dal/profiles";
 import { getUserTeam } from "@/lib/dal/teams";
 import { getUserRegistration } from "@/lib/dal/registrations";
+import { getParticipantAnnouncements } from "@/lib/dal/announcements";
+import { getEventSettings } from "@/lib/dal/settings";
+import { EventLiveBanner } from "@/components/operations/EventLiveBanner";
+import { NotificationCenter } from "@/components/notifications/NotificationCenter";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 
 export const metadata = {
@@ -30,6 +34,10 @@ export default async function DashboardPage() {
   const profile = user ? await getProfile(user.id) : null;
   const userTeamData = user ? await getUserTeam(user.id) : null;
   const registration = user ? await getUserRegistration(user.id) : null;
+  const [settings, participantAnnouncements] = await Promise.all([
+    getEventSettings(),
+    getParticipantAnnouncements(user?.id || ""),
+  ]);
   const isAdmin = await isFacultyAdmin();
   const isLead = await isStudentLead();
 
@@ -51,7 +59,14 @@ export default async function DashboardPage() {
   };
 
   return (
-    <div className="py-8 sm:py-12 space-y-10">
+    <>
+      {/* Live Event Operations Banner */}
+      <EventLiveBanner
+        initialStatus={settings.event_status}
+        initialMessage={settings.public_status_message}
+      />
+
+      <div className="py-8 sm:py-12 space-y-10">
       <PageHero
         badge="BUILDER PORTAL"
         eyebrow="PARTICIPANT DASHBOARD"
@@ -237,9 +252,15 @@ export default async function DashboardPage() {
               </div>
             </GlassPanel>
           )}
+
+          {/* Participant Notifications & Real-Time Announcements Feed */}
+          <div className="pt-6">
+            <NotificationCenter initialFeed={participantAnnouncements} />
+          </div>
         </div>
       </Container>
     </div>
+    </>
   );
 }
 

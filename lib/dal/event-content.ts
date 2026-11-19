@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
-import { Track, SchedulePhaseRecord, Announcement } from "@/lib/types/database";
+import { Track, SchedulePhaseRecord } from "@/lib/types/database";
 import { challengeTracks as staticTracks } from "@/config/tracks";
 import { schedulePhases as staticPhases } from "@/config/schedule";
 
@@ -167,41 +167,10 @@ export async function getPublishedSchedule(): Promise<SchedulePhaseRecord[]> {
   }
 }
 
-// ─── Announcements ───────────────────────────────────────────────────────────
+// ─── Announcements (Re-exported from dedicated announcements DAL) ───────────────
 
-export async function getPublicAnnouncements(): Promise<Announcement[]> {
-  if (!isSupabaseConfigured()) return [];
-
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from("announcements")
-      .select("*")
-      .eq("status", "published")
-      .eq("visibility", "Public Website")
-      .order("published_at", { ascending: false });
-
-    if (error || !data) return [];
-    return data as Announcement[];
-  } catch {
-    return [];
-  }
-}
-
-export async function getAdminAnnouncements(): Promise<Announcement[]> {
-  if (!isSupabaseConfigured()) return [];
-
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from("announcements")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error || !data) return [];
-    return data as Announcement[];
-  } catch {
-    return [];
-  }
-}
+export {
+  getPublicAnnouncements,
+  getAdminAnnouncements,
+} from "./announcements";
 

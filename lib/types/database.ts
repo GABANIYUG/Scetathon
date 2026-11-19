@@ -16,12 +16,15 @@ export type TrackApprovalStatus =
 
 export type AnnouncementStatus = "draft" | "published" | "archived";
 
+export type AnnouncementPriority = "Normal" | "Important" | "Urgent";
+
 export type AnnouncementCategory =
   | "General"
   | "Registration"
   | "Challenges"
   | "Schedule"
-  | "Important Notice";
+  | "Important Notice"
+  | "Event Operations";
 
 export type AnnouncementVisibility =
   | "Public Website"
@@ -29,6 +32,8 @@ export type AnnouncementVisibility =
   | "Internal Committee Only";
 
 export type RegistrationMode = "preview" | "open" | "closed" | "coming_soon";
+
+export type EventOperationalStatus = "preparing" | "live" | "paused" | "completed";
 
 export interface Profile {
   id: string;
@@ -130,6 +135,8 @@ export interface Announcement {
   category: AnnouncementCategory;
   status: AnnouncementStatus;
   visibility: AnnouncementVisibility;
+  priority?: AnnouncementPriority;
+  pinned?: boolean;
   author_label: string | null;
   created_by: string | null;
   published_at: string | null;
@@ -137,11 +144,28 @@ export interface Announcement {
   updated_at: string;
 }
 
+export interface AnnouncementRead {
+  id: string;
+  announcement_id: string;
+  user_id: string;
+  read_at: string;
+  created_at: string;
+}
+
+export interface AnnouncementWithReadState extends Announcement {
+  is_read: boolean;
+  read_at: string | null;
+}
+
 export interface EventSettings {
   id: string;
   event_name: string;
   tagline: string;
   registration_mode: RegistrationMode;
+  event_status?: EventOperationalStatus;
+  public_status_message?: string | null;
+  status_updated_by?: string | null;
+  status_updated_at?: string | null;
   opens_at: string | null;
   closes_at: string | null;
   min_team_size: number;
