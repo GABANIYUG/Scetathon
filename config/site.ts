@@ -63,7 +63,7 @@ export const siteConfig: SiteConfig = {
   ],
   registration: {
     ctaText: "Register Now",
-    href: "/#register",
+    href: "/register",
     isOpen: true,
     statusNotice: "Registrations opening soon for verified collegiate teams.",
   },

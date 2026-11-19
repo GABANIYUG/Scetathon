@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
@@ -60,6 +61,21 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     if (href) {
+      if (!isExternal && href.startsWith("/")) {
+        return (
+          <Link
+            href={href}
+            className={combinedClasses}
+            aria-disabled={disabled}
+            onClick={props.onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>}
+          >
+            {leftIcon && <span className="inline-flex shrink-0">{leftIcon}</span>}
+            <span>{children}</span>
+            {rightIcon && <span className="inline-flex shrink-0">{rightIcon}</span>}
+          </Link>
+        );
+      }
+
       return (
         <a
           href={href}
@@ -67,6 +83,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           rel={isExternal ? "noopener noreferrer" : undefined}
           className={combinedClasses}
           aria-disabled={disabled}
+          onClick={props.onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>}
         >
           {leftIcon && <span className="inline-flex shrink-0">{leftIcon}</span>}
           <span>{children}</span>
