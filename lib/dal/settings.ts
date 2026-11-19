@@ -14,7 +14,7 @@ export async function getEventSettings(): Promise<EventSettings> {
     event_status: "preparing",
     public_status_message: "SCETATHON 24-hour event operations are currently in preparation mode.",
     status_updated_by: null,
-    status_updated_at: new Date(2026, 0, 1).toISOString(),
+    status_updated_at: "2026-01-01T00:00:00.000Z",
     opens_at: null,
     closes_at: null,
     min_team_size: registrationConfig.teamSize.min,
@@ -22,7 +22,7 @@ export async function getEventSettings(): Promise<EventSettings> {
     allow_solo: registrationConfig.allowSolo,
     eligibility_information: "Open to enrolled engineering students from recognized colleges.",
     updated_by: null,
-    updated_at: new Date(2026, 0, 1).toISOString(),
+    updated_at: "2026-01-01T00:00:00.000Z",
   };
 
   if (!isSupabaseConfigured()) {

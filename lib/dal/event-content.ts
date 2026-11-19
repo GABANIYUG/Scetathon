@@ -23,8 +23,8 @@ export async function getPublishedTracks(): Promise<Track[]> {
       approval_status: t.status === "RATIFIED" ? "published" : "provisional",
       published_at: null,
       created_by: null,
-      created_at: new Date(2026, 0, 1).toISOString(),
-      updated_at: new Date(2026, 0, 1).toISOString(),
+      created_at: "2026-01-01T00:00:00.000Z",
+      updated_at: "2026-01-01T00:00:00.000Z",
     }));
   }
 
@@ -51,8 +51,8 @@ export async function getPublishedTracks(): Promise<Track[]> {
         approval_status: "provisional",
         published_at: null,
         created_by: null,
-        created_at: new Date(2026, 0, 1).toISOString(),
-        updated_at: new Date(2026, 0, 1).toISOString(),
+        created_at: "2026-01-01T00:00:00.000Z",
+        updated_at: "2026-01-01T00:00:00.000Z",
       }));
     }
 
@@ -77,8 +77,8 @@ export async function getAdminTracks(): Promise<Track[]> {
       approval_status: "provisional",
       published_at: null,
       created_by: null,
-      created_at: new Date(2026, 0, 1).toISOString(),
-      updated_at: new Date(2026, 0, 1).toISOString(),
+      created_at: "2026-01-01T00:00:00.000Z",
+      updated_at: "2026-01-01T00:00:00.000Z",
     }));
   }
 
@@ -131,8 +131,8 @@ export async function getPublishedSchedule(): Promise<SchedulePhaseRecord[]> {
       participant_instructions: p.participantInstructions,
       approval_status: "provisional",
       published_at: null,
-      created_at: new Date(2026, 0, 1).toISOString(),
-      updated_at: new Date(2026, 0, 1).toISOString(),
+      created_at: "2026-01-01T00:00:00.000Z",
+      updated_at: "2026-01-01T00:00:00.000Z",
     }));
   }
 
@@ -157,8 +157,8 @@ export async function getPublishedSchedule(): Promise<SchedulePhaseRecord[]> {
         participant_instructions: p.participantInstructions,
         approval_status: "provisional",
         published_at: null,
-        created_at: new Date(2026, 0, 1).toISOString(),
-        updated_at: new Date(2026, 0, 1).toISOString(),
+        created_at: "2026-01-01T00:00:00.000Z",
+        updated_at: "2026-01-01T00:00:00.000Z",
       }));
     }
 

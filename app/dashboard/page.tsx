@@ -1,5 +1,6 @@
 import React from "react";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Container } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
 import { GlassPanel } from "@/components/ui/GlassPanel";
@@ -22,6 +23,7 @@ export const metadata = {
 };
 
 export default async function DashboardPage() {
+  await connection();
   const isConfigured = isSupabaseConfigured();
   const user = await getCurrentUser();
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Metadata } from "next";
+import { connection } from "next/server";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { GlassPanel } from "@/components/ui/GlassPanel";
 import { Badge } from "@/components/ui/Badge";
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminAuditLogsPage() {
+  await connection();
   const logs = await getAuditLogs();
 
   return (

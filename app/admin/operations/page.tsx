@@ -1,5 +1,6 @@
 import React from "react";
 import { Metadata } from "next";
+import { connection } from "next/server";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { OperationsOverview } from "@/components/operations/OperationsOverview";
 import { getEventSettings } from "@/lib/dal/settings";
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminOperationsPage() {
+  await connection();
   const [settings, health, metrics, announcements] = await Promise.all([
     getEventSettings(),
     getOperationsReadiness(),

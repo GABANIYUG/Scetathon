@@ -27,7 +27,7 @@ export async function getOperationsReadiness(): Promise<OperationsHealthStatus> 
       eventStatusConfigured: true,
       announcementEngineReady: false,
       schedulePublished: true,
-      timestamp: new Date().toISOString(),
+      timestamp: "2026-01-01T00:00:00.000Z",
     };
   }
 
@@ -43,7 +43,7 @@ export async function getOperationsReadiness(): Promise<OperationsHealthStatus> 
       eventStatusConfigured: isConnected,
       announcementEngineReady: isConnected,
       schedulePublished: true,
-      timestamp: new Date().toISOString(),
+      timestamp: "2026-01-01T00:00:00.000Z",
     };
   } catch {
     return {
@@ -53,7 +53,7 @@ export async function getOperationsReadiness(): Promise<OperationsHealthStatus> 
       eventStatusConfigured: false,
       announcementEngineReady: false,
       schedulePublished: false,
-      timestamp: new Date().toISOString(),
+      timestamp: "2026-01-01T00:00:00.000Z",
     };
   }
 }
@@ -153,7 +153,7 @@ export async function getAuditLogs(): Promise<AuditLog[]> {
         entity_type: "event_settings",
         entity_id: "current",
         metadata: { new_status: "preparing", note: "Phase 7 initialization" },
-        created_at: new Date(2026, 0, 15, 10, 0, 0).toISOString(),
+        created_at: "2026-01-15T10:00:00.000Z",
       },
       {
         id: "log-002",
@@ -162,7 +162,7 @@ export async function getAuditLogs(): Promise<AuditLog[]> {
         entity_type: "announcement",
         entity_id: "ann-001",
         metadata: { title: "Registration Guidelines Preview", priority: "Important" },
-        created_at: new Date(2026, 0, 15, 10, 5, 0).toISOString(),
+        created_at: "2026-01-15T10:05:00.000Z",
       },
       {
         id: "log-003",
@@ -171,7 +171,7 @@ export async function getAuditLogs(): Promise<AuditLog[]> {
         entity_type: "track",
         entity_id: "ai-systems",
         metadata: { title: "AI & Intelligent Systems", status: "published" },
-        created_at: new Date(2026, 0, 18, 14, 0, 0).toISOString(),
+        created_at: "2026-01-18T14:00:00.000Z",
       },
       {
         id: "log-004",
@@ -180,7 +180,7 @@ export async function getAuditLogs(): Promise<AuditLog[]> {
         entity_type: "event_settings",
         entity_id: "current",
         metadata: { min_team_size: 2, max_team_size: 4 },
-        created_at: new Date(2026, 0, 20, 9, 30, 0).toISOString(),
+        created_at: "2026-01-20T09:30:00.000Z",
       },
     ];
   }

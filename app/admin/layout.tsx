@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getCurrentUser, isFacultyAdmin, isStudentLead } from "@/lib/auth/permissions";
@@ -18,6 +19,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  await connection();
   const isConfigured = isSupabaseConfigured();
 
   // If Supabase is configured, enforce server-side RBAC

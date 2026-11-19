@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://scetathon.scet.ac.in";
-  const lastModified = new Date();
+  const lastModified = new Date("2026-01-01T00:00:00.000Z");
 
   const routes = [
     { path: "", changeFrequency: "daily" as const, priority: 1.0 },
