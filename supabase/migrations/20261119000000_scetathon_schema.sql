@@ -185,55 +185,85 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON public.audit_logs(create
 -- =============================================================================
 -- 4. SECURITY DEFINER HELPER FUNCTIONS (FOR RLS)
 -- =============================================================================
+-- SECURITY NOTE: All SECURITY DEFINER functions use SET search_path = ''
+-- and fully schema-qualify every reference to prevent search_path injection.
+-- EXECUTE is REVOKED from PUBLIC/anon and re-GRANTED to authenticated roles.
+-- =============================================================================
 
 -- Check whether a user possesses an administrative role
+-- SECURITY NOTE: Restricted to service_role and caller-scoped to prevent
+-- arbitrary role enumeration by ordinary authenticated users.
 CREATE OR REPLACE FUNCTION public.has_role(check_user_id UUID, check_role TEXT)
 RETURNS BOOLEAN
 LANGUAGE sql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = ''
 STABLE
 AS $$
   SELECT EXISTS (
     SELECT 1 FROM public.user_roles
-    WHERE user_id = check_user_id AND role = check_role
+    WHERE user_id = check_user_id 
+      AND role = check_role
+      AND (
+        -- Caller scoping: Can only inspect own role, unless caller is already a faculty_admin or service_role
+        check_user_id = auth.uid()
+        OR auth.uid() IS NULL
+        OR EXISTS (
+          SELECT 1 FROM public.user_roles
+          WHERE user_id = auth.uid() AND role = 'faculty_admin'
+        )
+      )
   );
 $$;
+
+-- Prevent arbitrary role discovery: revoke EXECUTE from PUBLIC, anon, and authenticated.
+-- Only internal SECURITY DEFINER functions (owned by postgres) and service_role can call this.
+REVOKE EXECUTE ON FUNCTION public.has_role(UUID, TEXT) FROM PUBLIC, anon, authenticated;
+GRANT  EXECUTE ON FUNCTION public.has_role(UUID, TEXT) TO service_role;
 
 -- Faculty Admin check
 CREATE OR REPLACE FUNCTION public.is_faculty_admin()
 RETURNS BOOLEAN
 LANGUAGE sql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = ''
 STABLE
 AS $$
   SELECT public.has_role(auth.uid(), 'faculty_admin');
 $$;
+
+REVOKE EXECUTE ON FUNCTION public.is_faculty_admin() FROM PUBLIC, anon;
+GRANT  EXECUTE ON FUNCTION public.is_faculty_admin() TO authenticated, service_role;
 
 -- Student Lead check (or Faculty Admin)
 CREATE OR REPLACE FUNCTION public.is_student_lead()
 RETURNS BOOLEAN
 LANGUAGE sql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = ''
 STABLE
 AS $$
   SELECT public.has_role(auth.uid(), 'student_lead') OR public.has_role(auth.uid(), 'faculty_admin');
 $$;
+
+REVOKE EXECUTE ON FUNCTION public.is_student_lead() FROM PUBLIC, anon;
+GRANT  EXECUTE ON FUNCTION public.is_student_lead() TO authenticated, service_role;
 
 -- Jury check
 CREATE OR REPLACE FUNCTION public.is_jury()
 RETURNS BOOLEAN
 LANGUAGE sql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = ''
 STABLE
 AS $$
   SELECT public.has_role(auth.uid(), 'jury') OR public.has_role(auth.uid(), 'faculty_admin');
 $$;
 
--- Timestamp update trigger function
+REVOKE EXECUTE ON FUNCTION public.is_jury() FROM PUBLIC, anon;
+GRANT  EXECUTE ON FUNCTION public.is_jury() TO authenticated, service_role;
+
+-- Timestamp update trigger function (not SECURITY DEFINER — no elevated access needed)
 CREATE OR REPLACE FUNCTION public.set_updated_at()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -274,11 +304,13 @@ CREATE TRIGGER trigger_announcements_updated_at BEFORE UPDATE ON public.announce
 FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
 -- Auto-create profile trigger on auth.users signup
+-- SECURITY NOTE: search_path = '' + schema-qualified references prevent injection.
+-- This function runs in the auth schema context (triggered on auth.users INSERT).
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = ''
 AS $$
 BEGIN
   INSERT INTO public.profiles (id, full_name, phone)
@@ -297,6 +329,11 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
+-- handle_new_user is a trigger function invoked by the DB itself — not callable by clients.
+-- Explicitly revoke direct EXECUTE from public and authenticated roles.
+REVOKE EXECUTE ON FUNCTION public.handle_new_user() FROM PUBLIC, anon, authenticated;
+GRANT  EXECUTE ON FUNCTION public.handle_new_user() TO service_role;
+
 -- =============================================================================
 -- 5. ATOMIC TEAM REGISTRATION TRANSACTION (RPC)
 -- =============================================================================
@@ -310,7 +347,7 @@ CREATE OR REPLACE FUNCTION public.register_team_atomic(
 RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = ''
 AS $$
 DECLARE
   v_user_id UUID;
@@ -473,6 +510,10 @@ BEGIN
   );
 END;
 $$;
+
+-- register_team_atomic: authenticated users may call; anon/public cannot.
+REVOKE EXECUTE ON FUNCTION public.register_team_atomic(TEXT, TEXT, TEXT, JSONB) FROM PUBLIC, anon;
+GRANT  EXECUTE ON FUNCTION public.register_team_atomic(TEXT, TEXT, TEXT, JSONB) TO authenticated, service_role;
 
 -- =============================================================================
 -- 6. ROW LEVEL SECURITY (RLS) POLICIES
@@ -653,6 +694,10 @@ CREATE POLICY "announcements_admin_manage"
 
 -- -----------------------------------------------------------------------------
 -- 6.9 EVENT SETTINGS POLICIES
+-- SELECT: publicly readable (site uses registration_mode to gate the form)
+-- UPDATE: Faculty Admin only
+-- INSERT: Explicitly blocked from clients — singleton row inserted by seed only
+-- DELETE: Blocked (no policy = default deny with RLS enabled)
 -- -----------------------------------------------------------------------------
 CREATE POLICY "event_settings_public_select"
   ON public.event_settings FOR SELECT
@@ -664,13 +709,18 @@ CREATE POLICY "event_settings_admin_update"
   WITH CHECK (public.is_faculty_admin());
 
 -- -----------------------------------------------------------------------------
--- 6.10 AUDIT LOGS POLICIES (Immutable: Only Faculty Admin can read, no client update/delete)
+-- 6.10 AUDIT LOGS POLICIES
+-- Immutable: Faculty Admin can read. Direct client INSERT is blocked.
+-- All legitimate audit_log inserts happen inside SECURITY DEFINER functions
+-- (register_team_atomic, updateRegistrationStatus) which bypass RLS.
 -- -----------------------------------------------------------------------------
 CREATE POLICY "audit_logs_faculty_select"
   ON public.audit_logs FOR SELECT
   USING (public.is_faculty_admin());
 
+-- Direct INSERT from an authenticated client is restricted to faculty_admin only.
+-- System inserts happen via SECURITY DEFINER RPCs that bypass RLS anyway.
 CREATE POLICY "audit_logs_system_insert"
   ON public.audit_logs FOR INSERT
-  WITH CHECK (auth.uid() IS NOT NULL);
+  WITH CHECK (public.is_faculty_admin());
 
