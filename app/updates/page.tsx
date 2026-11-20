@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
@@ -21,10 +21,12 @@ export default async function UpdatesPage() {
   return (
     <>
       {/* Live Event Operations Banner */}
-      <EventLiveBanner
-        initialStatus={settings.event_status}
-        initialMessage={settings.public_status_message}
-      />
+      <Suspense fallback={null}>
+        <EventLiveBanner
+          initialStatus={settings.event_status}
+          initialMessage={settings.public_status_message}
+        />
+      </Suspense>
 
       <div className="py-12 sm:py-16 md:py-20 space-y-12">
         <Container size="lg">

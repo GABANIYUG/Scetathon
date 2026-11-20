@@ -1,4 +1,4 @@
-# Jules Nightly Report — 2026-11-19
+# Jules Nightly Report — 2026-11-20
 
 
 ## Project Status: [0% Complete]

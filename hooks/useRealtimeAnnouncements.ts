@@ -21,7 +21,7 @@ export function useRealtimeAnnouncements({
   const [status, setStatus] = useState<RealtimeStatus>(() =>
     isSupabaseConfigured() ? "connecting" : "offline"
   );
-  const [lastRefreshedAt, setLastRefreshedAt] = useState<Date>(new Date());
+  const [lastRefreshedAt, setLastRefreshedAt] = useState<Date | null>(null);
   const channelRef = useRef<ReturnType<ReturnType<typeof createClient>["channel"]> | null>(null);
 
   const refreshAnnouncements = useCallback(async () => {

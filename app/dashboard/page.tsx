@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { PageHero } from "@/components/ui/PageHero";
@@ -63,10 +63,12 @@ export default async function DashboardPage() {
   return (
     <>
       {/* Live Event Operations Banner */}
-      <EventLiveBanner
-        initialStatus={settings.event_status}
-        initialMessage={settings.public_status_message}
-      />
+      <Suspense fallback={null}>
+        <EventLiveBanner
+          initialStatus={settings.event_status}
+          initialMessage={settings.public_status_message}
+        />
+      </Suspense>
 
       <div className="py-8 sm:py-12 space-y-10">
       <PageHero
@@ -257,7 +259,15 @@ export default async function DashboardPage() {
 
           {/* Participant Notifications & Real-Time Announcements Feed */}
           <div className="pt-6">
-            <NotificationCenter initialFeed={participantAnnouncements} />
+            <Suspense
+              fallback={
+                <GlassPanel variant="elevated" padding="lg" edgeHighlight className="h-48 animate-pulse flex items-center justify-center text-xs text-[var(--color-text-muted)] font-mono">
+                  Loading squad communications feed...
+                </GlassPanel>
+              }
+            >
+              <NotificationCenter initialFeed={participantAnnouncements} />
+            </Suspense>
           </div>
         </div>
       </Container>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { siteConfig } from "@/config/site";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -23,10 +23,12 @@ export default async function HomePage() {
   return (
     <>
       {/* Live Event Operations Banner */}
-      <EventLiveBanner
-        initialStatus={settings.event_status}
-        initialMessage={settings.public_status_message}
-      />
+      <Suspense fallback={null}>
+        <EventLiveBanner
+          initialStatus={settings.event_status}
+          initialMessage={settings.public_status_message}
+        />
+      </Suspense>
 
       {/* ===================================================================
           HERO SECTION: The Innovation Core & Editorial Value Proposition
